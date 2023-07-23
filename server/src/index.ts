@@ -17,6 +17,10 @@ const io = new Server(server, {
 io.on("connection", (socket: Socket) => {
   console.log("New user connnected to the server.");
 
+  socket.on("file-edited", (data) => {
+    console.log("File edited ", data);
+  });
+  
   socket.on("desconnect", () => {
     console.log("User desconnectd");
   });

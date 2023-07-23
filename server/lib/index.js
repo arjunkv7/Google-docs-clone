@@ -12,11 +12,17 @@ const PORT = 4000;
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
-    }
+        methods: ["GET", "POST"],
+    },
 });
 io.on("connection", (socket) => {
-    console.log('New user connnected to the server.');
+    console.log("New user connnected to the server.");
+    socket.on("file-edited", (data) => {
+        console.log("File edited ", data);
+    });
+    socket.on("desconnect", () => {
+        console.log("User desconnectd");
+    });
 });
 server.listen(PORT, () => {
     console.log("The server is listinging on the port", PORT);
