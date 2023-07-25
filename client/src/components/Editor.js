@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router-dom"
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -26,15 +27,70 @@ const TOOLBAR_OPTIONS = [
 
     ['clean']                                         // remove formatting button
 ];
+const SAVE_INTERVAL_MS = 2000;
 
 let Editor = () => {
+    const [socket, setsocket] = useState(null);
+    const [quill, setQuill] = useState(null);
+    const { id: documentId } = useParams();
+
     useEffect(() => {
-        const socket = io("http://localhost:4000");
+        const s = io("http://localhost:4000");
+        setsocket(s);
 
         return () => {
-            socket.disconnect()
+            s.disconnect()
         }
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if (quill == null || socket == null) return
+
+        socket.once('load-document', document => {
+            quill.setContents(document);
+            quill.enable();
+        });
+        socket.emit('get-document', documentId);
+    }, [quill, socket, documentId]);
+
+    useEffect(() => {
+        if (quill == null || socket == null) return;
+
+        const interval = setInterval(() => {
+            socket.emit('save-document', quill.getContents());
+        }, SAVE_INTERVAL_MS);
+
+        return () => {
+            clearInterval(interval)
+        }
+    }, [quill, socket, documentId]);
+
+    useEffect(() => {
+        if (socket == null || quill == null) return
+
+        const handler = (delta) => {
+            quill.updateContents(delta);
+        };
+
+        socket.on('receinve-changes', handler);
+    }, [socket, quill]);
+
+    useEffect(() => {
+        if (socket == null || quill == null) return;
+
+        const handler = (delta, oldDelta, source) => {
+            if (source !== 'user') return
+
+            socket.emit('send-changes', delta)
+        }
+        quill.on('text-change', handler);
+
+        return () => {
+            quill.off("receive-changes", handler)
+        }
+
+    }, [socket, quill]);
+
 
     const wrapperRef = useCallback((wrapper) => {
         if (wrapper == null) return
@@ -42,12 +98,14 @@ let Editor = () => {
         wrapper.innerHTML = ''
         const editor = document.createElement('div');
         wrapper.append(editor);
-        new Quill(editor, {
+        const quill = new Quill(editor, {
             modules: {
                 toolbar: TOOLBAR_OPTIONS
             },
             theme: "snow"
         });
+        quill.disable()
+        setQuill(quill);
 
     }, []);
 
