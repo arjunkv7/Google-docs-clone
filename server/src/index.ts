@@ -20,6 +20,15 @@ io.on("connection", (socket: Socket) => {
   socket.on("file-edited", (data) => {
     console.log("File edited ", data);
   });
+
+  socket.on('get-document', documentId => {
+    console.log('dockumet call')
+    socket.emit('load-document', '')
+  });
+
+  socket.on('save-document', document => {
+    console.log( document)
+  })
   
   socket.on("desconnect", () => {
     console.log("User desconnectd");
