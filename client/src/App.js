@@ -12,6 +12,8 @@ function App() {
   return (
     <Router>
       <Routes>
+      
+        <Route path="/" element={<Navigate to={`/documents/${uuid()}`}/>}/>
         <Route path="/page" element={<Navigate to={`/documents/${uuid()}`}/>}/>
         <Route path="/documents/:id" element={ <Editor/>}/>
       </Routes>
