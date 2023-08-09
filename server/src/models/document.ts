@@ -1,8 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
 let documentSchema = new Schema({
-    data: Array
-});
+    documentId: String,
+    data: Object
+}, { timestamps: true });
 
 let model = mongoose.model('documents', documentSchema);
 export default model

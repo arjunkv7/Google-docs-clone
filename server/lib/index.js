@@ -16,7 +16,7 @@ const socket_io_1 = require("socket.io");
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const document_1 = __importDefault(require("./models/document"));
+const document_1 = require("./controllers/document");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const PORT = 4000;
@@ -32,15 +32,20 @@ io.on("connection", (socket) => {
     socket.on("file-edited", (data) => {
         console.log("File edited ", data);
     });
-    socket.on('get-document', documentId => {
+    socket.on('get-document', (documentId) => __awaiter(void 0, void 0, void 0, function* () {
         console.log('dockumet call');
-        socket.emit('load-document', '');
-    });
-    socket.on('save-document', (document) => __awaiter(void 0, void 0, void 0, function* () {
-        console.log('Save document event');
-        let data = yield document_1.default.create({ data: document });
-        console.log(data);
+        let documentData = yield (0, document_1.getDocument)(documentId);
+        console.log("fetched document", documentData);
+        socket.emit('load-document', documentData);
+    }));
+    socket.on('send-changes', (document) => {
         console.log(document);
+    });
+    socket.on('save-document', (documentId, document) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log('Save document event');
+        // let data = await Doc.create({data:document});
+        let d = yield (0, document_1.updateOrInsertDocument)(documentId, document);
+        console.log(d);
     }));
     socket.on("desconnect", () => {
         console.log("User desconnectd");

@@ -2,7 +2,8 @@ import { Server, Socket } from "socket.io";
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
-import Doc from './models/document'
+import Doc from './models/document';
+import { updateOrInsertDocument, getDocument} from "./controllers/document";
 
 
 const app = express();
@@ -25,18 +26,30 @@ io.on("connection", (socket: Socket) => {
     console.log("File edited ", data);
   });
 
-  socket.on('get-document', documentId => {
+  socket.on('get-document', async documentId => {
     console.log('dockumet call')
-    socket.emit('load-document', '')
+    let documentData = await getDocument(documentId);
+    console.log("fetched document" ,documentData)
+    socket.emit('load-document', documentData)
   });
 
-  socket.on('save-document',async  document => {
+  socket.on('send-changes', (document) => {
+    console.log(document)
+  })
+
+  socket.on('save-document',async  (documentId, document) => {
     console.log('Save document event')
-    let data = await Doc.create({data:document});
-    console.log(data)
-    console.log( document)
+    // let data = await Doc.create({data:document});
+    let d = await updateOrInsertDocument(documentId, document);
+    console.log( d )
   })
   
+
+
+
+
+
+
   socket.on("desconnect", () => {
     console.log("User desconnectd");
   });

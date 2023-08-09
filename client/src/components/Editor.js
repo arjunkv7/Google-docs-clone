@@ -43,21 +43,27 @@ let Editor = () => {
         }
     }, []);
 
+    //get document
     useEffect(() => {
         if (quill == null || socket == null) return
 
         socket.once('load-document', document => {
-            quill.setContents(document);
+            console.log(document)
+            quill.setContents(document?.data);
             quill.enable();
         });
         socket.emit('get-document', documentId);
     }, [quill, socket, documentId]);
 
+    //save document
     useEffect(() => {
         if (quill == null || socket == null) return;
 
+        const contents = quill.getContents();
         const interval = setInterval(() => {
-            socket.emit('save-document', quill.getContents());
+            socket.emit('save-document', documentId, quill.getContents() );
+            console.log(contents)
+
         }, SAVE_INTERVAL_MS);
 
         return () => {
@@ -65,6 +71,7 @@ let Editor = () => {
         }
     }, [quill, socket, documentId]);
 
+    //recieve changes
     useEffect(() => {
         if (socket == null || quill == null) return
 
@@ -72,9 +79,10 @@ let Editor = () => {
             quill.updateContents(delta);
         };
 
-        socket.on('receinve-changes', handler);
+        socket.on('receive-changes', handler);
     }, [socket, quill]);
 
+    //send changes
     useEffect(() => {
         if (socket == null || quill == null) return;
 
