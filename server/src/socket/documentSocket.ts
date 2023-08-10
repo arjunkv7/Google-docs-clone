@@ -11,19 +11,21 @@ let documentSocket = (io: Server) => {
 
         socket.on('get-document', async documentId => {
             console.log('dockumet call')
+
+            socket.join(documentId);
             let documentData = await getDocument(documentId);
             console.log("fetched document", documentData)
             socket.emit('load-document', documentData)
         });
 
-        socket.on('send-changes', (document) => {
-            console.log(document)
+        socket.on('send-changes', (documentId, changes) => {
+            console.log("changes",documentId, changes);
+            socket.to(documentId).emit("receive-changes",changes);
         })
 
         socket.on('save-document', async (documentId, document) => {
             console.log('Save document event')
             let d = await updateOrInsertDocument(documentId, document);
-            console.log(d)
         })
 
         socket.on("desconnect", () => {

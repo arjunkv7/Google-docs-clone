@@ -27,7 +27,7 @@ const TOOLBAR_OPTIONS = [
 
     ['clean']                                         // remove formatting button
 ];
-const SAVE_INTERVAL_MS = 2000;
+const SAVE_INTERVAL_MS = 200000;
 
 let Editor = () => {
     const [socket, setsocket] = useState(null);
@@ -89,7 +89,7 @@ let Editor = () => {
         const handler = (delta, oldDelta, source) => {
             if (source !== 'user') return
 
-            socket.emit('send-changes', delta)
+            socket.emit('send-changes', documentId,delta)
         }
         quill.on('text-change', handler);
 

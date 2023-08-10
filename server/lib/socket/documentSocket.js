@@ -18,17 +18,18 @@ let documentSocket = (io) => {
         });
         socket.on('get-document', (documentId) => __awaiter(void 0, void 0, void 0, function* () {
             console.log('dockumet call');
+            socket.join(documentId);
             let documentData = yield (0, document_1.getDocument)(documentId);
             console.log("fetched document", documentData);
             socket.emit('load-document', documentData);
         }));
-        socket.on('send-changes', (document) => {
-            console.log(document);
+        socket.on('send-changes', (documentId, changes) => {
+            console.log("changes", documentId, changes);
+            socket.to(documentId).emit("receive-changes", changes);
         });
         socket.on('save-document', (documentId, document) => __awaiter(void 0, void 0, void 0, function* () {
             console.log('Save document event');
             let d = yield (0, document_1.updateOrInsertDocument)(documentId, document);
-            console.log(d);
         }));
         socket.on("desconnect", () => {
             console.log("User desconnectd");
