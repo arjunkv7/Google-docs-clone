@@ -1,4 +1,4 @@
-import Doc from '../models/document';
+import Doc from '../models/Document';
 
 export let updateOrInsertDocument = async (documentId: string, data: object) => {
     if (documentId == null || documentId == '') return;
