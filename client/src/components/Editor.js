@@ -27,7 +27,7 @@ const TOOLBAR_OPTIONS = [
 
     ['clean']                                         // remove formatting button
 ];
-const SAVE_INTERVAL_MS = 200000;
+const SAVE_INTERVAL_MS = 2000000;
 
 let Editor = () => {
     const [socket, setsocket] = useState(null);
