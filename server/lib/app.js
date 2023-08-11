@@ -29,18 +29,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const db_1 = require("./config/db");
-const errorMiddleware_1 = __importDefault(require("./middlewares/errorMiddleware"));
+const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use((0, express_1.json)());
 app.get('/', (req, res) => {
     res.send('hii');
 });
+const user_1 = __importDefault(require("./router/user"));
+app.use(user_1.default);
 app.use((req, res, next) => {
     res.status(404).json({
         message: "No route found"
     });
 });
-app.use(errorMiddleware_1.default);
+app.use(errorHandler_1.default);
 (0, db_1.connectToDatabase)();
 exports.default = app;

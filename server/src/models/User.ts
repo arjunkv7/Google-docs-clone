@@ -14,6 +14,4 @@ let userSchema = new Schema({
     password: { type: String, required: true }
 }, { timestamps: true });
 
-let UserModel = mongoose.model<userDoc>('users', userSchema);
-
-export default UserModel;
+export let UserModel = mongoose.model<userDoc>('users', userSchema);

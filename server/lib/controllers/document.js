@@ -8,19 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDocument = exports.updateOrInsertDocument = void 0;
-const Document_1 = __importDefault(require("../models/Document"));
+const index_1 = require("../models/index");
 let updateOrInsertDocument = (documentId, data) => __awaiter(void 0, void 0, void 0, function* () {
     if (documentId == null || documentId == '')
         return;
     console.log(data, documentId);
-    let document = yield Document_1.default.findOneAndUpdate({ documentId }, { data });
+    let document = yield index_1.UserModel.findOneAndUpdate({ documentId }, { data });
     if (document == null) {
-        document = yield Document_1.default.create({ documentId });
+        document = yield index_1.UserModel.create({ documentId });
     }
     return document;
 });
@@ -28,6 +25,6 @@ exports.updateOrInsertDocument = updateOrInsertDocument;
 let getDocument = (documentId) => __awaiter(void 0, void 0, void 0, function* () {
     if (documentId == null || documentId == '')
         return '';
-    return yield Document_1.default.findOne({ documentId }).select({ data: 1, _id: 0 });
+    return yield index_1.UserModel.findOne({ documentId }).select({ data: 1, _id: 0 });
 });
 exports.getDocument = getDocument;

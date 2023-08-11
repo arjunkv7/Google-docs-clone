@@ -1,12 +1,12 @@
-import Doc from '../models/Document';
+import { UserModel } from '../models/index';
 
 export let updateOrInsertDocument = async (documentId: string, data: object) => {
     if (documentId == null || documentId == '') return;
     console.log(data, documentId)
 
-    let document = await Doc.findOneAndUpdate({ documentId }, { data });
+    let document = await UserModel.findOneAndUpdate({ documentId }, { data });
     if (document == null) {
-        document = await Doc.create({ documentId });
+        document = await UserModel.create({ documentId });
     }
 
     return document;
@@ -15,5 +15,5 @@ export let updateOrInsertDocument = async (documentId: string, data: object) => 
 export let getDocument = async (documentId: string) => {
     if (documentId == null || documentId == '') return '';
 
-    return await Doc.findOne({ documentId }).select({ data: 1, _id: 0 })
+    return await UserModel.findOne({ documentId }).select({ data: 1, _id: 0 })
 }

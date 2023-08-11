@@ -8,7 +8,7 @@ const http_1 = __importDefault(require("http"));
 const app_1 = __importDefault(require("./app"));
 const documentSocket_1 = __importDefault(require("./socket/documentSocket"));
 const server = http_1.default.createServer(app_1.default);
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: "http://localhost:3000",

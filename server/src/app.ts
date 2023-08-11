@@ -1,7 +1,7 @@
 import express, { json } from 'express';
 import cors from 'cors';
 import { connectToDatabase } from "./config/db";
-import ErrorHandler from "./middlewares/errorMiddleware";
+import errorHandler from "./middlewares/errorHandler";
 
 const app = express();
 
@@ -12,12 +12,19 @@ app.use(json());
 app.get('/', (req, res) => {
     res.send('hii')
 })
+import userRouter from './router/user'
+app.use(userRouter);
 app.use((req, res, next) => {
     res.status(404).json({
         message: "No route found"
     })
-})
-app.use(ErrorHandler);
+});
+
+
+
+
+
+app.use(errorHandler);
 
 connectToDatabase();
 

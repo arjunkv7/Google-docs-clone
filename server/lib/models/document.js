@@ -23,10 +23,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.model = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 let documentSchema = new mongoose_1.Schema({
     documentId: String,
     data: Object
 }, { timestamps: true });
-let model = mongoose_1.default.model('documents', documentSchema);
-exports.default = model;
+exports.model = mongoose_1.default.model('documents', documentSchema);

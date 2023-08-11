@@ -1,1 +1,1 @@
-import {userDoc} from "../models/index";
+import { userDoc } from "../models/index";

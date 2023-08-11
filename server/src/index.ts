@@ -6,8 +6,7 @@ import documentSocket from "./socket/documentSocket";
 
 const server = http.createServer(app);
 
-const PORT = 4000;
-
+const PORT = process.env.PORT || 4000;
 
 const io: Server = new Server(server, {
   cors: {
@@ -15,6 +14,7 @@ const io: Server = new Server(server, {
     methods: ["GET", "POST"],
   },
 });
+
 documentSocket(io);
 
 server.listen(PORT, () => {

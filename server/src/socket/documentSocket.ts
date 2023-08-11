@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { updateOrInsertDocument, getDocument } from "../controllers/document";
 
-let documentSocket = (io: Server) => {
+let documentSocket = (io: Server) => { 
     io.on('connection', (socket) => {
         console.log('New user connected to the socket..###');
 
