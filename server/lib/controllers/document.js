@@ -15,9 +15,9 @@ let updateOrInsertDocument = (documentId, data) => __awaiter(void 0, void 0, voi
     if (documentId == null || documentId == '')
         return;
     console.log(data, documentId);
-    let document = yield index_1.UserModel.findOneAndUpdate({ documentId }, { data });
+    let document = yield index_1.DocumentModel.findOneAndUpdate({ documentId }, { data });
     if (document == null) {
-        document = yield index_1.UserModel.create({ documentId });
+        document = yield index_1.DocumentModel.create({ documentId });
     }
     return document;
 });
@@ -25,6 +25,6 @@ exports.updateOrInsertDocument = updateOrInsertDocument;
 let getDocument = (documentId) => __awaiter(void 0, void 0, void 0, function* () {
     if (documentId == null || documentId == '')
         return '';
-    return yield index_1.UserModel.findOne({ documentId }).select({ data: 1, _id: 0 });
+    return yield index_1.DocumentModel.findOne({ documentId }).select({ data: 1, _id: 0 });
 });
 exports.getDocument = getDocument;

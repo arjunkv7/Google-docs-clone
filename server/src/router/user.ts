@@ -7,9 +7,16 @@ const router: Router = Router();
 let a = [ query("name").notEmpty()]
 
 router.get('/signUp',a, validateRequest, (req: Request, res: Response, next: NextFunction) => {
-    res.send('hii is working')
+    try {
+        res.send('hii is working')
 
-    next(req)
+        
+    } catch (error) {
+        console.log('hiis;ldfjj')
+        next(error);
+    }
+
+   
 });
 
 export default router;

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CustomError } from "../errors/customError";
 
-const ErrorHandler = (err: CustomError, req: Request, res: Response) => {
+const ErrorHandler = (err: CustomError, req: Request, res: Response, next: NextFunction) => {
     console.log("Error handler is working..")
     if (err instanceof CustomError) {
         console.log("hii here")

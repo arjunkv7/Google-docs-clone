@@ -5,5 +5,5 @@ let documentSchema = new Schema({
     data: Object
 }, { timestamps: true });
 
-export let model = mongoose.model('documents', documentSchema);
+export let DocumentModel = mongoose.model('documents', documentSchema);
 

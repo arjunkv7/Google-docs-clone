@@ -5,7 +5,9 @@ import { Request, Response, NextFunction } from 'express';
 export const validateRequest = (req: Request, res: Response, next: NextFunction) => {
     let errors = validationResult(req);
     
-    if (!errors.isEmpty()) throw new RequestValidatorError(errors.array());
-
-    next()
+    let err
+    if (!errors.isEmpty()) err =  new RequestValidatorError(errors.array());
+    console.log(err)
+    return next(err)
+    
 }

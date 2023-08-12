@@ -33,16 +33,17 @@ const errorHandler_1 = __importDefault(require("./middlewares/errorHandler"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use((0, express_1.json)());
+app.use(errorHandler_1.default);
 app.get('/', (req, res) => {
     res.send('hii');
 });
 const user_1 = __importDefault(require("./router/user"));
-app.use(user_1.default);
+app.use("/h", user_1.default);
+console.log('errro hanler pre');
 app.use((req, res, next) => {
     res.status(404).json({
         message: "No route found"
     });
 });
-app.use(errorHandler_1.default);
 (0, db_1.connectToDatabase)();
 exports.default = app;
