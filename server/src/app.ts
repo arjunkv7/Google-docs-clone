@@ -1,5 +1,6 @@
 import express, { json, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import morgan from "morgan"
 import { connectToDatabase } from "./config/db";
 import errorHandler from "./middlewares/errorHandler";
 
@@ -7,16 +8,14 @@ const app = express();
 
 app.use(cors());
 app.use(json());
-app.use(errorHandler);
+app.use(morgan('dev'));
 
 
 app.get('/', (req, res) => {
     res.send('hii')
 })
 import userRouter from './router/user'
-app.use("/h",userRouter);
-
-
+app.use("/user", userRouter);
 
 
 
@@ -28,6 +27,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 
+app.use(errorHandler);
 
 connectToDatabase();
 

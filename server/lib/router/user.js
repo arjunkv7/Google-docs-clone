@@ -3,15 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const express_validator_1 = require("express-validator");
 const validateRequest_1 = require("../middlewares/validateRequest");
+const user_1 = require("../controllers/user");
 const router = (0, express_1.Router)();
-let a = [(0, express_validator_1.query)("name").notEmpty()];
-router.get('/signUp', a, validateRequest_1.validateRequest, (req, res, next) => {
-    try {
-        res.send('hii is working');
-    }
-    catch (error) {
-        console.log('hiis;ldfjj');
-        next(error);
-    }
-});
+let validateUserData = [
+    (0, express_validator_1.body)("firstName").notEmpty().withMessage("First name is required"),
+    (0, express_validator_1.body)("userName").isString().notEmpty().withMessage("User id is required"),
+    (0, express_validator_1.body)('password').notEmpty().withMessage('Password is required'),
+    validateRequest_1.validateRequest
+];
+router.post('/signUp', validateUserData, user_1.userSignUp);
+let validateLoginPayload = [
+    (0, express_validator_1.body)("userName").notEmpty().withMessage("First name is required"),
+    (0, express_validator_1.body)('password').isString().withMessage('Password should be string').notEmpty().withMessage('Password is required'),
+    validateRequest_1.validateRequest
+];
+router.post('/login', validateLoginPayload, user_1.userLogin);
 exports.default = router;

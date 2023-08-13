@@ -1,10 +1,10 @@
 import { CustomError } from "./customError";
-import { ValidationError } from "express-validator";
+import { ValidationError, FieldValidationError } from "express-validator";
 
 export class RequestValidatorError extends CustomError {
     statusCode = 400;
 
-    constructor(public errors: ValidationError[]) {
+    constructor(public errors: (ValidationError )[]) {
         super('Validation error');
 
         // Only because we are extending a built in class

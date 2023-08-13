@@ -1,22 +1,27 @@
 import { Router, Request, Response, NextFunction } from "express";
-import { query } from 'express-validator';
+import { query, body } from 'express-validator';
 import { validateRequest } from "../middlewares/validateRequest";
-import { } from "../models/index";
+import { UserModel } from "../models/index";
+import { userLogin, userSignUp } from "../controllers/user";
 
 const router: Router = Router();
-let a = [ query("name").notEmpty()]
 
-router.get('/signUp',a, validateRequest, (req: Request, res: Response, next: NextFunction) => {
-    try {
-        res.send('hii is working')
+let validateUserData = [
+    body("firstName").notEmpty().withMessage("First name is required"),
+    body("userName").isString().notEmpty().withMessage("User id is required"),
+    body('password').notEmpty().withMessage('Password is required'),
 
-        
-    } catch (error) {
-        console.log('hiis;ldfjj')
-        next(error);
-    }
+    validateRequest
+]
+router.post('/signUp', validateUserData, userSignUp);
 
-   
-});
+let validateLoginPayload = [
+    body("userName").notEmpty().withMessage("First name is required"),
+    body('password').isString().withMessage('Password should be string').notEmpty().withMessage('Password is required'),
+
+    validateRequest
+]
+router.post('/login', validateLoginPayload, userLogin);
+
 
 export default router;

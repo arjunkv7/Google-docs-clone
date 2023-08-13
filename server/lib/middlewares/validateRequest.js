@@ -8,7 +8,6 @@ const validateRequest = (req, res, next) => {
     let err;
     if (!errors.isEmpty())
         err = new requestValidatorError_1.RequestValidatorError(errors.array());
-    console.log(err);
     return next(err);
 };
 exports.validateRequest = validateRequest;
