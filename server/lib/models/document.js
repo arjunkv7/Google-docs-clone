@@ -28,6 +28,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 let documentSchema = new mongoose_1.Schema({
     documentId: { type: String, required: true },
     data: Object,
-    creator: { type: String, required: true }
+    creator: { type: String, required: true },
+    editors: [String]
 }, { timestamps: true });
 exports.DocumentModel = mongoose_1.default.model('documents', documentSchema);

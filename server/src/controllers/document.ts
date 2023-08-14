@@ -1,19 +1,35 @@
-import { DocumentModel  } from '../models/index';
+import { DocumentModel } from '../models/index';
 
-export let updateOrInsertDocument = async (documentId: string, data: object) => {
+export let updateOrInsertDocument = async (documentId: string, data: object, userName: string) => {
     if (documentId == null || documentId == '') return;
     console.log(data, documentId)
 
     let document = await DocumentModel.findOneAndUpdate({ documentId }, { data });
     if (document == null) {
-        document = await DocumentModel.create({ documentId });
+        document = await DocumentModel.create({
+            documentId,
+            editors: [userName],
+            creator: userName ?? ""
+        });
     }
 
     return document;
 }
 
-export let getDocument = async (documentId: string) => {
+export let getDocument = async (documentId: string, userName: string) => {
     if (documentId == null || documentId == '') return '';
+    if (userName == null || userName == "") return '';
 
-    return await DocumentModel.findOne({ documentId }).select({ data: 1, _id: 0 })
+    let document = await DocumentModel
+        .findOne({
+            documentId,
+            editors: {
+                $in: userName
+            }
+        })
+        .select({ data: 1, _id: 0 });
+
+    if (!document) return false;
+
+    return document;
 }

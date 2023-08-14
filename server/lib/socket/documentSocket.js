@@ -16,20 +16,21 @@ let documentSocket = (io) => {
         socket.on("file-edited", (data) => {
             console.log("File edited ", data);
         });
-        socket.on('get-document', (documentId) => __awaiter(void 0, void 0, void 0, function* () {
+        socket.on('get-document', (documentId, userName) => __awaiter(void 0, void 0, void 0, function* () {
             console.log('dockumet call');
             socket.join(documentId);
-            let documentData = yield (0, document_1.getDocument)(documentId);
-            console.log("fetched document", documentData);
+            let documentData = yield (0, document_1.getDocument)(documentId, userName);
+            if (!documentData)
+                return socket.emit('no-access');
             socket.emit('load-document', documentData);
         }));
         socket.on('send-changes', (documentId, changes) => {
             console.log("changes", documentId, changes);
             socket.to(documentId).emit("receive-changes", changes);
         });
-        socket.on('save-document', (documentId, document) => __awaiter(void 0, void 0, void 0, function* () {
+        socket.on('save-document', (documentId, data, userName) => __awaiter(void 0, void 0, void 0, function* () {
             console.log('Save document event');
-            let d = yield (0, document_1.updateOrInsertDocument)(documentId, document);
+            let d = yield (0, document_1.updateOrInsertDocument)(documentId, data, userName);
         }));
         socket.on("desconnect", () => {
             console.log("User desconnectd");

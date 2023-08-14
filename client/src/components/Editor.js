@@ -52,6 +52,10 @@ let Editor = () => {
             quill.setContents(document?.data);
             quill.enable();
         });
+
+        socket.on('no-access', data => {
+            console.log("No access for this file")
+        })
         socket.emit('get-document', documentId);
     }, [quill, socket, documentId]);
 
