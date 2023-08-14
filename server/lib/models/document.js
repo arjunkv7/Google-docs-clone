@@ -26,7 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DocumentModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 let documentSchema = new mongoose_1.Schema({
-    documentId: String,
-    data: Object
+    documentId: { type: String, required: true },
+    data: Object,
+    creator: { type: String, required: true }
 }, { timestamps: true });
 exports.DocumentModel = mongoose_1.default.model('documents', documentSchema);
