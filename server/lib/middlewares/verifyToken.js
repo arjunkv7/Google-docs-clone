@@ -17,7 +17,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const notAuthorizedError_1 = require("../errors/notAuthorizedError");
 let validateToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let token = req.cookies.token;
+        let token = req.cookies.token || req.headers.token;
         let userData = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
         req.user = userData;
         next();

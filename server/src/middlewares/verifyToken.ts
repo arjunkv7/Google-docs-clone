@@ -20,7 +20,7 @@ declare global {
 
 export let validateToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let token = req.cookies.token;
+        let token = req.cookies.token || req.headers.token;
         let userData = jwt.verify(token, process.env.JWT_SECRET!) as userData;
         req.user = userData;
         next();

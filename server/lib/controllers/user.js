@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userLogin = exports.userSignUp = void 0;
+exports.getMyDocuments = exports.userLogin = exports.userSignUp = void 0;
 const index_1 = require("../models/index");
 const wrongPayloadError_1 = require("../errors/wrongPayloadError");
 const password_1 = require("../utils/password");
@@ -79,3 +79,14 @@ let userLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.userLogin = userLogin;
+let getMyDocuments = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        let { userName } = req.user;
+        let myDocuments = yield index_1.DocumentModel.find({ creator: userName });
+    }
+    catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+exports.getMyDocuments = getMyDocuments;

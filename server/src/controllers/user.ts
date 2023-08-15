@@ -1,4 +1,4 @@
-import { userDoc, UserModel } from "../models/index";
+import { DocumentModel, userDoc, UserModel } from "../models/index";
 import { Request, Response, NextFunction } from "express";
 import { WrongPayloadError } from "../errors/wrongPayloadError";
 import { Password } from "../utils/password";
@@ -54,5 +54,16 @@ export let userLogin = async (req: Request, res: Response, next: NextFunction) =
     } catch (error) {
         console.log(error);
         next(error)
+    }
+}
+
+export let getMyDocuments = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        let { userName } = req.user;
+        let myDocuments = await DocumentModel.find({ creator: userName })
+
+    } catch (error) {
+        console.log(error);
+        next(error);
     }
 }

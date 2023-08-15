@@ -19,7 +19,7 @@ function NewDocument() {
         </div>
       </div>
       <div className="flex pl-20 pr-20 pt-2 justify-between card-body">
-        <Link to="/Editer">
+        <Link to="/documents">
           <div className="flex img-div">
             <img
               src={create}
