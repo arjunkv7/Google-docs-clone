@@ -61,6 +61,10 @@ export let getMyDocuments = async (req: Request, res: Response, next: NextFuncti
     try {
         let { userName } = req.user;
         let myDocuments = await DocumentModel.find({ creator: userName })
+        return res.status(200).json({
+            status: true,
+            data: myDocuments
+        });
 
     } catch (error) {
         console.log(error);

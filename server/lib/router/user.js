@@ -19,5 +19,5 @@ let validateLoginPayload = [
     validateRequest_1.validateRequest
 ];
 router.post('/login', validateLoginPayload, user_1.userLogin);
-router.get('/myDocuments', verifyToken_1.validateToken);
+router.get('/myDocuments', verifyToken_1.validateToken, user_1.getMyDocuments);
 exports.default = router;

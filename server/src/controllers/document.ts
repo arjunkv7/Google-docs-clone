@@ -1,19 +1,24 @@
 import { DocumentModel } from '../models/index';
 
 export let updateOrInsertDocument = async (documentId: string, data: object, userName: string) => {
-    if (documentId == null || documentId == '') return;
-    console.log(data, documentId)
+    try {
+        if (documentId == null || documentId == '') return;
+        console.log(data, documentId, userName)
 
-    let document = await DocumentModel.findOneAndUpdate({ documentId }, { data });
-    if (document == null) {
-        document = await DocumentModel.create({
-            documentId,
-            editors: [userName],
-            creator: userName ?? ""
-        });
+        let document = await DocumentModel.findOneAndUpdate({ documentId }, { data });
+        if (document == null) {
+            document = await DocumentModel.create({
+                documentId,
+                editors: [userName],
+                creator: userName
+            });
+        }
+
+        return document;
+    } catch (error) {
+        throw (error);
     }
 
-    return document;
 }
 
 export let getDocument = async (documentId: string, userName: string) => {
@@ -29,7 +34,7 @@ export let getDocument = async (documentId: string, userName: string) => {
         })
         .select({ data: 1, _id: 0 });
 
-    if (!document) return false;
+    if (!document) return "";
 
     return document;
 }

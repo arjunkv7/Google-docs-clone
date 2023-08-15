@@ -12,18 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getDocument = exports.updateOrInsertDocument = void 0;
 const index_1 = require("../models/index");
 let updateOrInsertDocument = (documentId, data, userName) => __awaiter(void 0, void 0, void 0, function* () {
-    if (documentId == null || documentId == '')
-        return;
-    console.log(data, documentId);
-    let document = yield index_1.DocumentModel.findOneAndUpdate({ documentId }, { data });
-    if (document == null) {
-        document = yield index_1.DocumentModel.create({
-            documentId,
-            editors: [userName],
-            creator: userName !== null && userName !== void 0 ? userName : ""
-        });
+    try {
+        if (documentId == null || documentId == '')
+            return;
+        console.log(data, documentId, userName);
+        let document = yield index_1.DocumentModel.findOneAndUpdate({ documentId }, { data });
+        if (document == null) {
+            document = yield index_1.DocumentModel.create({
+                documentId,
+                editors: [userName],
+                creator: userName
+            });
+        }
+        return document;
     }
-    return document;
+    catch (error) {
+        throw (error);
+    }
 });
 exports.updateOrInsertDocument = updateOrInsertDocument;
 let getDocument = (documentId, userName) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,7 +45,7 @@ let getDocument = (documentId, userName) => __awaiter(void 0, void 0, void 0, fu
     })
         .select({ data: 1, _id: 0 });
     if (!document)
-        return false;
+        return "";
     return document;
 });
 exports.getDocument = getDocument;

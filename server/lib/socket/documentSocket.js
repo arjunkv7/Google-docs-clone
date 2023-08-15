@@ -20,8 +20,7 @@ let documentSocket = (io) => {
             console.log('dockumet call');
             socket.join(documentId);
             let documentData = yield (0, document_1.getDocument)(documentId, userName);
-            if (!documentData)
-                return socket.emit('no-access');
+            // if (!documentData) return socket.emit('no-access');
             socket.emit('load-document', documentData);
         }));
         socket.on('send-changes', (documentId, changes) => {

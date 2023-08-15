@@ -20,12 +20,15 @@ declare global {
 
 export let validateToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        let token = req.cookies.token || req.headers.token;
-        let userData = jwt.verify(token, process.env.JWT_SECRET!) as userData;
+        let token = req.headers.token as string;
+        if (!token || token == "") return res.send("Token is requried")
+        
+        let userData = jwt.verify(token, JWT_KEY) as userData;
         req.user = userData;
         next();
     } catch (error) {
-        throw new NotAuthorizedError()
+        console.log(error)
+        next(new NotAuthorizedError());
     }
 
 }

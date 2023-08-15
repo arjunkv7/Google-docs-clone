@@ -14,7 +14,7 @@ let documentSocket = (io: Server) => {
 
             socket.join(documentId);
             let documentData = await getDocument(documentId, userName);
-            if (!documentData) return socket.emit('no-access');
+            // if (!documentData) return socket.emit('no-access');
             
             socket.emit('load-document', documentData)
         });

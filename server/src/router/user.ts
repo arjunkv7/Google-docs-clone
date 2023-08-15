@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import { query, body } from 'express-validator';
 import { validateRequest } from "../middlewares/validateRequest";
 import { UserModel } from "../models/index";
-import { userLogin, userSignUp } from "../controllers/user";
+import { getMyDocuments, userLogin, userSignUp } from "../controllers/user";
 import { validateToken } from "../middlewares/verifyToken";
 
 const router: Router = Router();
@@ -24,7 +24,7 @@ let validateLoginPayload = [
 ]
 router.post('/login', validateLoginPayload, userLogin);
 
-router.get('/myDocuments', validateToken,)
+router.get('/myDocuments', validateToken, getMyDocuments);
 
 
 export default router;

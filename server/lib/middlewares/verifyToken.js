@@ -14,16 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const db_1 = require("../config/db");
 const notAuthorizedError_1 = require("../errors/notAuthorizedError");
 let validateToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        let token = req.cookies.token || req.headers.token;
-        let userData = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        let token = req.headers.token;
+        if (!token || token == "")
+            return res.send("Token is requried");
+        let userData = jsonwebtoken_1.default.verify(token, db_1.JWT_KEY);
         req.user = userData;
         next();
     }
     catch (error) {
-        throw new notAuthorizedError_1.NotAuthorizedError();
+        console.log(error);
+        next(new notAuthorizedError_1.NotAuthorizedError());
     }
 });
 exports.validateToken = validateToken;

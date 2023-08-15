@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
@@ -27,14 +27,26 @@ const TOOLBAR_OPTIONS = [
 
     ['clean']                                         // remove formatting button
 ];
-const SAVE_INTERVAL_MS = 2000000;
+const SAVE_INTERVAL_MS = 2000;
 
 let Editor = () => {
     const [socket, setsocket] = useState(null);
     const [quill, setQuill] = useState(null);
     const { id: documentId } = useParams();
+    const [token, setToken] = useState(null);
+    const [useDetails, setUserDetails] = useState(null);
+    const [userName, setuserName] = useState(null);
+
 
     useEffect(() => {
+        let tk = window.localStorage.getItem("token");
+        let userDetails1 = window.localStorage.getItem("userData");
+
+        if (!tk || !userDetails1) return <Navigate to="/login" />;
+        setToken(tk);
+        setUserDetails(JSON.parse(userDetails1));
+        setuserName(JSON.parse(userDetails1)?.userName)
+
         const s = io("http://localhost:4000");
         setsocket(s);
 
@@ -48,7 +60,6 @@ let Editor = () => {
         if (quill == null || socket == null) return
 
         socket.once('load-document', document => {
-            console.log(document)
             quill.setContents(document?.data);
             quill.enable();
         });
@@ -56,17 +67,16 @@ let Editor = () => {
         socket.on('no-access', data => {
             console.log("No access for this file")
         })
-        socket.emit('get-document', documentId);
+        socket.emit('get-document', documentId, userName);
     }, [quill, socket, documentId]);
 
     //save document
     useEffect(() => {
-        if (quill == null || socket == null) return;
+        if (quill == null || socket == null || userName == null) return;
 
         const contents = quill.getContents();
         const interval = setInterval(() => {
-            socket.emit('save-document', documentId, quill.getContents() );
-            console.log(contents)
+            socket.emit('save-document', documentId, quill.getContents(), userName);
 
         }, SAVE_INTERVAL_MS);
 
@@ -93,7 +103,7 @@ let Editor = () => {
         const handler = (delta, oldDelta, source) => {
             if (source !== 'user') return
 
-            socket.emit('send-changes', documentId,delta)
+            socket.emit('send-changes', documentId, delta)
         }
         quill.on('text-change', handler);
 

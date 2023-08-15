@@ -83,6 +83,10 @@ let getMyDocuments = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     try {
         let { userName } = req.user;
         let myDocuments = yield index_1.DocumentModel.find({ creator: userName });
+        return res.status(200).json({
+            status: true,
+            data: myDocuments
+        });
     }
     catch (error) {
         console.log(error);
