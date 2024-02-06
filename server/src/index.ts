@@ -1,7 +1,13 @@
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+const envPath = path.join(__dirname, '..', '.env');
+dotenv.config({ path:envPath });
 import { Server, Socket } from "socket.io";
 import http from "http";
 import app from './app';
 import documentSocket from "./socket/documentSocket";
+
+
 
 
 const server = http.createServer(app);
