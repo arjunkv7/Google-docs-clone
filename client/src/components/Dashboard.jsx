@@ -7,11 +7,13 @@ import { Link, Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   useEffect(() => {
-    let token = window.localStorage.getItem("token");
-    let userDetails = window.localStorage.getItem("userData");
-
-    if (!token) return <Navigate to="/login" />;
+ 
   }, []);
+  
+  let token = window.localStorage.getItem("token");
+  let userDetails = window.localStorage.getItem("userData");
+  console.log("token", token)
+  if (!token) return <Navigate to="/login" />;
 
   return (
     <>
